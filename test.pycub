@@ -1,0 +1,6 @@
+event on_player_join:
+    broadcast("omg")
+    stop
+    
+on player join:
+    broadcast("test")

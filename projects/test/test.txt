@@ -1,0 +1,10 @@
+public class PycubEvent implements Listener {
+
+    @EventHandler 
+    public void OnPlayerJoin0(PlayerJoinEvent event) {
+        Bukkit.broascastMessage("cc");
+        Bukkit.broascastMessage("cc");
+    }
+}
+ttestse
+esfsef

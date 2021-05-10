@@ -12,14 +12,6 @@ def PyCub_Compil():
     def PyCub_Import(var):
         PyCub_I_Write.append(var)
     
-    
-    def PyCub_AddImport(imports):
-        with open(TargetFile, "r+", encoding='utf8') as f:
-            old = f.read() # read everything in the file
-            f.seek(0) # rewind
-            f.write("new linesetset\n" + old) # write the new line before
-
-
     # LIST OF ALL EXPRESSION 
 
     def PyCub_AddExpr(car, event):
@@ -110,8 +102,6 @@ def PyCub_Compil():
 
             if event.startswith('on_player_join:') or event.startswith('player join:'):
                 
-
-                PyCub_AddImport("igg\n esse")  
                 # écriture de l'handler évent
                 
                 PyCub_Write('\n' + tab + '@EventHandler \n')

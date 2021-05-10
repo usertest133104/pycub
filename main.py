@@ -2,15 +2,11 @@
 # IMPORTS
 
 import string
-import time
-import os
 
 # BASE NON COMPILED FUNCTION
 
 def PyCub_Compil():
 
-
-    
     def PyCub_Write(var):
         PyCub_C_Write.append(var)
     def PyCub_Import(var):

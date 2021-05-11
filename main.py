@@ -1,7 +1,7 @@
 
 # IMPORTS
 
-import string
+import os
 
 # BASE NON COMPILED FUNCTION
 
@@ -41,6 +41,31 @@ def PyCub_Compil():
             reason = reason.replace("player +", 'event.getPlayer().getName() +')
             reason = reason.replace("+ player", '+ event.getPlayer().getName()')
             PyCub_Write(tab * 2 + "Bukkit.broascastMessage(" + reason + ");\n")   
+
+    def PyCub_AddEvent(event, inevent):
+        
+        # LIST OF ALL EVENT 
+        
+        if event.startswith('on_player_join:') or event.startswith('player join:'):
+                
+            # écriture de l'handler évent
+                
+            PyCub_Write('\n' + tab + '@EventHandler \n')
+                
+            # NAME OF PUBLIC CLASS
+                
+            PyCub_Write(tab + 'public void OnPlayerJoin' + str(eventplayerjoin) + '(PlayerJoinEvent event) {\n')
+            expr_lign = lign
+            for _expr in From:
+                expr = _expr.strip()
+                expr_lign =+ 1
+                if expr == "stop":
+                    eventplayerjoin += 1
+                    break
+                else:
+                    PyCub_AddEffect(expr, "on_player_join")
+                
+            PyCub_Write(tab * 1 + '}\n')            
 
     print("Loading ...")
 
@@ -99,27 +124,7 @@ def PyCub_Compil():
             
             # LIST OF ALL EVENT 
             
-
-            if event.startswith('on_player_join:') or event.startswith('player join:'):
-                
-                # écriture de l'handler évent
-                
-                PyCub_Write('\n' + tab + '@EventHandler \n')
-                
-                # NAME OF PUBLIC CLASS
-                
-                PyCub_Write(tab + 'public void OnPlayerJoin' + str(eventplayerjoin) + '(PlayerJoinEvent event) {\n')
-                expr_lign = lign
-                for _expr in From:
-                    expr = _expr.strip()
-                    expr_lign =+ 1
-                    if expr == "stop":
-                        eventplayerjoin += 1
-                        break
-                    else:
-                        PyCub_AddEffect(expr, "on_player_join")
-                
-                PyCub_Write(tab * 1 + '}\n')                  
+            PyCub_AddEvent(car, "Main")               
                         
         else:        
             PyCub_Write('\n')

@@ -6,5 +6,3 @@ public class PycubEvent implements Listener {
         Bukkit.broascastMessage("cc");
     }
 }
-ttestse
-esfsef

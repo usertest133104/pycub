@@ -1,3 +1,5 @@
 on player join:
     broadcast("cc")
-    broadcast("cc")
+    broadcast("test")
+    stop
+

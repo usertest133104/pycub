@@ -1,5 +1,9 @@
-on player join:
-    broadcast("cc")
-    broadcast("test")
+on player leave:
+    broadcast("gestests" + player name)
     stop
+
+on player join:
+    broadcast("qzsefsef!")
+    stop
+
 

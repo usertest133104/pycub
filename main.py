@@ -78,6 +78,7 @@ def PyCub_Compil():
                 
             # écriture de l'handler évent
                 
+            print("player")    
             PyCub_Write('\n' + tab + '@EventHandler \n')
             
                 
@@ -85,8 +86,7 @@ def PyCub_Compil():
                 
             PyCub_Write(tab + 'public void OnPlayerJoin' + str(eventnumber) + '(PlayerJoinEvent event) {\n')
             PyCub_Import("import org.bukkit.event.player.PlayerJoinEvent;")
-            PyCub_Import("import org.bukkit.event.EventHandler;")
-            PyCub_Import("import org.bukkit.event.Listener;")
+            PyCub_Import("import org.bukkit.event.player.PlayerListener;")
             expr_lign = lign
             for _expr in From:
                 expr_lign =+ 1
@@ -101,15 +101,14 @@ def PyCub_Compil():
         elif Event.startswith('on_player_leave:') or Event.startswith('player leave:'):
                 
             # écriture de l'handler évent
-                
+                  
             PyCub_Write('\n' + tab + '@EventHandler \n')
                 
             # NAME OF PUBLIC CLASS
                 
             PyCub_Write(tab + 'public void OnPlayerJoin' + str(eventnumber) + '(PlayerQuitEvent event) {\n')
             PyCub_Import("import org.bukkit.event.player.PlayerQuitEvent;")
-            PyCub_Import("import org.bukkit.event.EventHandler;")
-            PyCub_Import("import org.bukkit.event.Listener;")
+            PyCub_Import("import org.bukkit.event.player.PlayerListener;")
             expr_lign = lign
             for _expr in From:
                 expr_lign =+ 1
@@ -194,7 +193,6 @@ def PyCub_Compil():
     if first_event == True:
         PyCub_Write('}\n')
 
-#    Target.write('package fr.' + ProjectName + ''.listeners;')
     PyCub_Import(' ')
     for var in PyCub_C_Import:
         Target.write(var + "\n")

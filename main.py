@@ -6,6 +6,9 @@ import time
 
 # BASE NON COMPILED FUNCTION
 
+global number_event_call
+number_event_call = 0
+
 def PyCub_Compil():
 
     def PyCub_Write(var):
@@ -15,7 +18,11 @@ def PyCub_Compil():
             pass
         else:
             PyCub_C_Import.append(var)
-    
+    def PyCub_UnSeparteArg(arg):
+        return arg.replace('||', ' ')
+    def PyCub_SeparteArg(arg):
+        return arg.replace(' ', '||')
+            
     # LIST OF ALL EXPRESSION 
 
     def PyCub_AddExpr(car, event):
@@ -28,35 +35,44 @@ def PyCub_Compil():
             print('no finish')
         elif car in ' =+ ':
             print('no finish')
-    
-    def PyCub_UnSeparteArg(arg):
-        return arg.replace('||', ' ')
-    
-    def PyCub_SeparteArg(arg):
-        return arg.replace(' ', '||')
+
     
     def PyCub_ModifArg(car, expr):
-        arg = PyCub_SeparteArg(car)
-        if 'player' in arg:
-            if 'player||name' in arg:
-                arg = arg.replace('player||name', 'event.getPlayer().getName()')
+#        print("call :" + car)
+        if '"' and '+' in car:
+            arg = PyCub_SeparteArg(car)
+#            print("yes '" + car)
+            if 'player' in arg:
+#                print(arg)
+                if 'player||name' in arg:
+                    arg = arg.replace('player||name', 'event.getPlayer().getName()')
+                if 'player' or '||player||' or '||player' or 'player||' in arg:
+                    arg = arg.replace('player', 'event.getPlayer()')    
                 return PyCub_UnSeparteArg(arg)
-            else:
-                arg = arg.replace('player', 'event.getPlayer()')    
+        elif '"' and '+' not in car:
+#            print("not '" + car)
+            if 'player' in car:
+#                print(car)
+                if 'player name' in car:
+                    arg = car.replace('player name', 'event.getPlayer().getName()')
+                if 'player' in arg:
+                    arg = car.replace('player', 'event.getPlayer()')    
                 return PyCub_UnSeparteArg(arg)
         else:
-            return arg 
+            return car 
     
     # LIST OF ALL EFFECT
 
     def PyCub_AddEffect(car, event):
         if car.startswith('setjoinmessage'):
-            expr = car
             if "setjoinmessage" in From.read():
                 print(f"You can't use the setjoinmessage() expression because it already exists ")
             else:
-                expr = PyCub_ModifArg(expr, "broadcast")
-                PyCub_Write(tab * 2 + "Bukkit.broadcastMessage(" + expr + ");\n")  
+                expr = car
+                expr = expr[14:]
+                expr = expr[:-1]
+                expr = PyCub_ModifArg(expr, "setjoinmessage")
+                PyCub_Write(tab * 2 + "event.setJoinMessage(" + expr + ");\n")  
         elif car.startswith('broadcast'):
             expr = car
             expr = expr[10:]
@@ -74,19 +90,21 @@ def PyCub_Compil():
         
         # LIST OF ALL EVENT 
         
+        global number_event_call
+        number_event_call += 1
         if Event.startswith('on_player_join:') or Event.startswith('player join:'):
                 
             # écriture de l'handler évent
                 
-            print("player")    
             PyCub_Write('\n' + tab + '@EventHandler \n')
             
                 
             # NAME OF PUBLIC CLASS
                 
-            PyCub_Write(tab + 'public void OnPlayerJoin' + str(eventnumber) + '(PlayerJoinEvent event) {\n')
+            PyCub_Write(tab + 'public void OnPlayerJoin' + str(number_event_call) + '(PlayerJoinEvent event) {\n')
             PyCub_Import("import org.bukkit.event.player.PlayerJoinEvent;")
-            PyCub_Import("import org.bukkit.event.player.PlayerListener;")
+            PyCub_Import("import org.bukkit.event.EventHandler;")
+            PyCub_Import("import org.bukkit.event.Listener;")
             expr_lign = lign
             for _expr in From:
                 expr_lign =+ 1
@@ -101,14 +119,15 @@ def PyCub_Compil():
         elif Event.startswith('on_player_leave:') or Event.startswith('player leave:'):
                 
             # écriture de l'handler évent
-                  
+                
             PyCub_Write('\n' + tab + '@EventHandler \n')
                 
             # NAME OF PUBLIC CLASS
                 
-            PyCub_Write(tab + 'public void OnPlayerJoin' + str(eventnumber) + '(PlayerQuitEvent event) {\n')
+            PyCub_Write(tab + 'public void OnPlayerLeave' + str(number_event_call) + '(PlayerQuitEvent event) {\n')
             PyCub_Import("import org.bukkit.event.player.PlayerQuitEvent;")
-            PyCub_Import("import org.bukkit.event.player.PlayerListener;")
+            PyCub_Import("import org.bukkit.event.EventHandler;")
+            PyCub_Import("import org.bukkit.event.Listener;")
             expr_lign = lign
             for _expr in From:
                 expr_lign =+ 1
@@ -193,6 +212,7 @@ def PyCub_Compil():
     if first_event == True:
         PyCub_Write('}\n')
 
+#    Target.write('package fr.' + ProjectName + ''.listeners;')
     PyCub_Import(' ')
     for var in PyCub_C_Import:
         Target.write(var + "\n")

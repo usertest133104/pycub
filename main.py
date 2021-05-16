@@ -9,7 +9,10 @@ import time
 global number_event_call
 number_event_call = 0
 
-def PyCub_Compil():
+def PyCub_Compil(dir, File_name, main, author = "PyCubTranspilator"):
+
+
+    # ADD WRITE AND IMPORT JAVA FILE
 
     def PyCub_Write(var):
         PyCub_C_Write.append(var)
@@ -18,10 +21,24 @@ def PyCub_Compil():
             pass
         else:
             PyCub_C_Import.append(var)
+    
+    # ADD LISTENERS AND COMMAND IN Main.java
+    
+    def PyCub_AddListener(var):
+        PyCub_Listener_Write.append('getServer().getPluginManager().registerEvents(new ' + var + 'testListener(), this);')   
+        PyCub_Listener_Name.append(var)  
+    
+    def PyCub_AddCommand(var):
+        PyCub_Command_Write.append('getCommand("' + var + 'test").setExecutor(new testCommand());')   
+        PyCub_Command_Name.append(var)  
+    
+    # SEPARATE ESPACE    
+        
     def PyCub_UnSeparteArg(arg):
         return arg.replace('||', ' ')
     def PyCub_SeparteArg(arg):
         return arg.replace(' ', '||')
+
             
     # LIST OF ALL EXPRESSION 
 
@@ -145,12 +162,15 @@ def PyCub_Compil():
     ProjectName = 'test/'
     PathTargetFile = 'C:/PythonProject/Pycub/projects/' + ProjectName
     
-    TargetFile = PathTargetFile + '/test.txt'
+    TargetFile = PathTargetFile + 'Main/test.java'
+    MainFile = PathTargetFile + 'test.java'
     TargetCacheFile = 'C:/PythonProject/Pycub/scripts/.cache/test.pycub'
     
-    os.makedirs(os.path.dirname(PathTargetFile), exist_ok=True)
+    os.makedirs(os.path.dirname(TargetFile), exist_ok=True)
+    os.makedirs(os.path.dirname(MainFile), exist_ok=True)
     From = open(FromFile, 'r', encoding='utf8')
     Target = open(TargetFile, 'w+', encoding='utf8')
+    MainFile = open(TargetFile, 'w+', encoding='utf8')
 
     tab = "    "
     first_event = False
@@ -158,7 +178,9 @@ def PyCub_Compil():
     lign = 1
     PyCub_C_Write = []
     PyCub_C_Import = []
-    
+    PyCub_Listener_Name = []
+    PyCub_Command_Name = []
+
     for car in From:
         
         # Sélectionneur d'évènement
@@ -219,13 +241,51 @@ def PyCub_Compil():
     for var in PyCub_C_Write:
         Target.write(var)
 
+
+    # ADD LISTENERS, COMMAND IN Main.java
+
+    MainFile.write('package fr.gonpvp;' + '\n')
+    for var in PyCub_Listener_Name:
+        Target.write('fr.gonpvp.listeners.' + var + ';\n')
+    for var in PyCub_Command_Name:
+        Target.write('fr.gonpvp.command.' + var + ';\n')    
         
-    # fermeture du fichier avec la méthode close()
+    # CLOSE ALL FILE WITH METHOD close()
     Target.close()
     From.close()
 
     print("Compiled !")
 
-PyCub_Compil()
+def PyCub_CreateProject(dir, File_name, main, author = "PyCubTranspilator"):
+    
+    # CREATE PLUGINS.YML
+    
+    pl_yml = dir + File_name + '/src/main/resources/plugin.yml'
+    print(pl_yml)
+    os.makedirs(os.path.dirname(pl_yml), exist_ok=True)
+    pl_yml = open(pl_yml, 'w+', encoding='utf8')
+    
+    
+    pl_yml.write('name: ' + File_name + '\n')
+    pl_yml.write('author: ' + author + '\n')
+    
+    # fr.gonpvp.pycub
+    
+    pl_yml.write('main: ' + main + '\n')
+    pl_yml.write('version: ' + '0.1' + '\n')
+    pl_yml.write('commands:' + '\n')
+    pl_yml.close()
+    
+    
+    # CREATE MAIN DIR
+    
+    maindir = main.replace('.', '/')
+    main_dir = dir + File_name + '/src/main/java/' + maindir + '/'
+    os.makedirs(os.path.dirname(main_dir), exist_ok=True)
+    
+    
+PyCub_CreateProject('C:/PythonProject/Pycub/projects/test/', 'test', 'fr.gonpvp.pycub')
+PyCub_Compil('C:/PythonProject/Pycub/projects/test/', 'test', 'fr.gonpvp')
+
 #os.system('cd C:\PythonProject\Pycub\jar-ressource')
 #os.system('gradlew.bat')

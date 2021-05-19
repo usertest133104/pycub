@@ -1,0 +1,5 @@
+name: test
+author: PyCubTranspilator
+main: fr.gonpvp.pycub
+version: 0.1
+commands:

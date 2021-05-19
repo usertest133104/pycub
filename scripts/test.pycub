@@ -1,5 +1,9 @@
 on player join:
-    broadcast("cc")
-    broadcast("test")
+    broadcast(player name + "player craft" + player + player name + player)
     stop
+
+on player join:
+    broadcast(player name)
+    stop
+
 

@@ -1,0 +1,5 @@
+name: exemple-alpha-5
+author: PyCubTranspilator
+main: fr.exemple.author
+version: 0.1
+commands:

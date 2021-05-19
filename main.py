@@ -34,10 +34,10 @@
 import os
 import json
 
-def PyCub_Compil(dir, ProjectName):
+def PyCub_Compil(dir, File_name, main, author = "PyCubTranspilator"):
 
-    DataFile = dir + ProjectName + '/' + 'data.json'
-    DataFile = open(DataFile, 'r', encoding='utf8')
+
+    # ADD WRITE AND IMPORT JAVA FILE
 
     #                 _ _          __ _ _      
     #                (_) |        / _(_) |     

@@ -1,3 +1,7 @@
+on player leave:
+    broadcast("gestests" + player name)
+    stop
+
 on player join:
     broadcast(player name + "player craft" + player + player name + player)
     stop

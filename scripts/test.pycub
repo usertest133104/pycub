@@ -1,13 +1,14 @@
-on player leave:
-    broadcast("gestests" + player name)
-    stop
+start file: startfile
 
 on player join:
-    broadcast(player name + "player craft" + player + player name + player)
+    broadcast(player name + "testsetseest")
     stop
+
+change file: omgg
 
 on player join:
     broadcast(player name)
     stop
 
+change file: testsetseest
 

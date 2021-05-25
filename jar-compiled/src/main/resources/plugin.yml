@@ -1,8 +1,0 @@
-name: Default
-version: @version@
-main: be.gonpvp.pycub
-api-version: 1.16
-prefix: Default plugin loaded!
-load: STARTUP
-authors: [pycub]
-description: Plugin created with PyCub!

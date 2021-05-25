@@ -34,10 +34,10 @@
 import os
 import json
 
-def PyCub_Compil(dir, File_name, main, author = "PyCubTranspilator"):
+def PyCub_Compil(dir, ProjectName):
 
-
-    # ADD WRITE AND IMPORT JAVA FILE
+    DataFile = dir + ProjectName + '/' + 'data.json'
+    DataFile = open(DataFile, 'r', encoding='utf8')
 
     #                 _ _          __ _ _      
     #                (_) |        / _(_) |     
@@ -46,42 +46,31 @@ def PyCub_Compil(dir, File_name, main, author = "PyCubTranspilator"):
     #   \ V  V /| |  | | ||  __/ | | | | |  __/
     #    \_/\_/ |_|  |_|\__\___| |_| |_|_|\___|
                                             
-                                        
+                                
     def PyCub_Write(var):
-        PyCub_C_Write.append(var)
+        PyCub_C_Write.append('key' + PyCub_JavaFile[-1] + var)
+    
     def PyCub_Import(var):
-        if var in PyCub_C_Import:
+        if 'key' + PyCub_JavaFile[-1] + var in PyCub_C_Import:
             pass
         else:
-            PyCub_C_Import.append(var)
+            PyCub_C_Import.append('key' + PyCub_JavaFile[-1] + var)
     
-    def PyCub_DirMain(name):
-        
-        # CONTENT DATA.JSON FILE
-            
-        with open(dir + ProjectName + '/' + 'data.json', 'w') as file_json:
-            data = file_json.load(f)
-        
-        if name == 'main' or 'maindir':            
-            return DataFile[1]
-        
-        elif name == 'pl' or 'pldir':
-            return DataFile.readlines(2)
-        
-        elif name == 'small' or 'package' or 'smallpackage':
-            return DataFile.readlines(3)
-    
-    print(PyCub_DirMain(main))
+    def PyCub_AddJavaFile(name):
+        PyCub_JavaFile.append(name.rstrip() + '.java')
+        print('add file' + str(PyCub_JavaFile) + ActuelFileModif)
     
     # ADD LISTENERS IN MAIN.JAVA
     
     def PyCub_AddListener(var):
+        ListenerText = var
         PyCub_Listener_Write.append('getServer().getPluginManager().registerEvents(new ' + var + 'testListener(), this);')   
         PyCub_Listener_Name.append(var)  
     
     # ADD COMMAND IN MAIN.JAVA
     
     def PyCub_AddCommand(var):
+        ListenerText = var
         PyCub_Command_Write.append('getCommand("' + var + 'test").setExecutor(new testCommand());')   
         PyCub_Command_Name.append(var)  
     
@@ -154,18 +143,19 @@ def PyCub_Compil(dir, File_name, main, author = "PyCubTranspilator"):
                 print(f"You can't use the setjoinmessage() expression because it already exists ")
             else:
                 expr = car
-                expr = expr[14:]
-                expr = expr[:-1]
+                expr = expr[14:-1]
                 expr = PyCub_ModifArg(expr, "setjoinmessage")
                 PyCub_Write(tab * 2 + "event.setJoinMessage(" + expr + ");\n")  
         
         elif car.startswith('broadcast'):
             expr = car
-            expr = expr[10:]
-            expr = expr[:-1]
+            expr = expr[10:-1]
             expr = PyCub_ModifArg(expr, "broadcast")
             PyCub_Write(tab * 2 + "Bukkit.broadcastMessage(" + expr + ");\n")   
 
+        else:
+            print("The effect is not exist (lign" + str(PycubLign) + ")")
+   
     #                   _                         _           _             
     #                  | |                       | |         | |            
     #   ___ _   _ _ __ | |_ __ ___  __   ___  ___| | ___  ___| |_ ___  _ __ 
@@ -205,12 +195,12 @@ def PyCub_Compil(dir, File_name, main, author = "PyCubTranspilator"):
             # NAME OF PUBLIC CLASS
                 
             PyCub_Write(tab + 'public void OnPlayerJoin' + str(number_event_call) + '(PlayerJoinEvent event) {\n')
-            PyCub_Import("import org.bukkit.event.player.PlayerJoinEvent;")
             PyCub_Import("import org.bukkit.event.EventHandler;")
             PyCub_Import("import org.bukkit.event.Listener;")
-            expr_lign = lign
+            PyCub_Import("import org.bukkit.event.player.PlayerJoinEvent;")
+            expr_PycubLign = PycubLign
             for _expr in From:
-                expr_lign =+ 1
+                expr_PycubLign =+ 1
                 if _expr.strip() == "stop":
                     break
                 else:
@@ -231,42 +221,42 @@ def PyCub_Compil(dir, File_name, main, author = "PyCubTranspilator"):
             PyCub_Import("import org.bukkit.event.player.PlayerQuitEvent;")
             PyCub_Import("import org.bukkit.event.EventHandler;")
             PyCub_Import("import org.bukkit.event.Listener;")
-            expr_lign = lign
+            expr_PycubLign = PycubLign
             for _expr in From:
-                expr_lign =+ 1
+                expr_PycubLign =+ 1
                 if _expr.strip() == "stop":
                     break
                 else:
                     PyCub_ChoiceArg(_expr.strip(), "on_player_leave")
                 
             PyCub_Write(tab * 1 + '}\n')       
-
+        
+        else:
+            print("The event is not exist (lign" + str(PycubLign) + ")")
+    
     print("Loading ...")
 
-    FromFile = 'C:/PythonProject/Pycub/scripts/test.pycub'
+    FromFile = 'C:/PythonProject/Pycub/scripts/' + ProjectName + '.pycub'
     
-    ProjectName = 'test/'
-    PathTargetFile = 'C:/PythonProject/Pycub/projects/' + ProjectName
+    PathTargetFile = 'C:/PythonProject/Pycub/projects/' + ProjectName + '/'
     
-    TargetFile = PathTargetFile + 'Main/test.java'
-    MainFile = PathTargetFile + 'test.java'
     TargetCacheFile = 'C:/PythonProject/Pycub/scripts/.cache/test.pycub'
     
-    os.makedirs(os.path.dirname(TargetFile), exist_ok=True)
-    os.makedirs(os.path.dirname(MainFile), exist_ok=True)
     From = open(FromFile, 'r', encoding='utf8')
-    Target = open(TargetFile, 'w+', encoding='utf8')
-    MainFile = open(TargetFile, 'w+', encoding='utf8')
 
     tab = "    "
     first_event = False
-    global lign
-    lign = 1
+    global PycubLign
+    PycubLign = 1
     PyCub_C_Write = []
     PyCub_C_Import = []
     PyCub_Listener_Name = []
     PyCub_Command_Name = []
-
+    PyCub_Listener_Write = []
+    PyCub_Command_Write = []
+    PyCub_JavaFile = ['Main.java']
+    ActuelFileModif = 'Main.java'
+    
 #                 _ _              _               _              
 #                (_) |            | |             | |             
 #  __      ___ __ _| |_ ___    ___| |__   ___  ___| | _____ _ __  
@@ -285,13 +275,20 @@ def PyCub_Compil(dir, File_name, main, author = "PyCubTranspilator"):
                                                                 
     for car in From:
         
-        # Sélectionneur d'évènement
-        lign =+ 1
+        # ADD 1 Lign (FOR WARN)
         
-        if car.startswith('package'):
-            PyCub_Write(car + ';')
+        PycubLign =+ 1
+        
         if car.startswith('#'):
             PyCub_Write(car)
+        # elif car.startswith('delete file:'):
+        #     PyCub_AddJavaFile(car[12:])
+        #     print('test changefile' + car[12:])
+        elif car.startswith('start file:'):
+            PyCub_AddJavaFile(car[12:])
+        elif car.startswith('change file:') or car.startswith('moove file:'):
+            PyCub_Write('}\n')
+            PyCub_AddJavaFile(car[13:])
 #        elif car.startswith('import'):
 #            if car.startswith('import bukkit'):
 #                PyCub_Write('import org.bukkit;\n')
@@ -313,7 +310,6 @@ def PyCub_Compil(dir, File_name, main, author = "PyCubTranspilator"):
             # ADD FIRST PUBLIC CLASS
             
             if first_event == False:
-                PyCub_Write('public class PycubEvent implements Listener {\n')
                 first_event = True
                 global eventnumber
                 eventnumber = 1
@@ -329,31 +325,74 @@ def PyCub_Compil(dir, File_name, main, author = "PyCubTranspilator"):
             acar = car
             acar.replace(" ", "")
             
-            if lign != 1:
+            if PycubLign != 1:
                 if car.strip() == '':
-                    print("The event is not exist lign" + str(lign))
+                    print("The types is not exist PycubLign" + str(PycubLign))
 
     if first_event == True:
         PyCub_Write('}\n')
+    
+    #                 _ _           _                  
+    #                (_) |         (_)                 
+    #  __      ___ __ _| |_ ___     _  __ ___   ____ _ 
+    #  \ \ /\ / / '__| | __/ _ \   | |/ _` \ \ / / _` |
+    #   \ V  V /| |  | | ||  __/  _| | (_| |\ V / (_| |
+    #    \_/\_/ |_|  |_|\__\___| (_) |\__,_| \_/ \__,_|
+    #                             _/ |                 
+    #                            |__/                      
+        
+    print('dir : ' + dir + ProjectName + '/src/main/resources/' + 'plugin.yml')
+    with open(dir + ProjectName + '/src/main/resources/' + 'plugin.yml', 'r') as PluginYml:
+        # author = PluginYml.readline(2).replace('author: ', '').rstrip()
+        # main = PluginYml.readline(3).rstrip()
+        
+        numberlign = 1
+        
+        textlign = PluginYml.readline().rstrip()
+        while textlign:
+            if numberlign == 2:
+                author = textlign.replace('author: ', '')
+                print('author : ' + author)
+            elif numberlign == 3:
+                author = textlign.replace('author: ', '').strip('.')
+                print('author : ' + author)
+            numberlign += 1
+            
+            textlign = PluginYml.readline().rstrip()
+            
+#        maindir = main.replace('.', '/')
+        
+    for NameFile in PyCub_JavaFile:
+        print('Writing file ' + NameFile + '...')
+        Target = open(PathTargetFile + NameFile, 'w+', encoding='utf8')
+        NoJavaNameFile = NameFile.replace('.java','')
+        Target.write('package fr.gonpvp.' + NoJavaNameFile.lower() + ';\n\n')
+        for var in PyCub_C_Import:
+            # print('import (in file ' + NameFile + ')' + var)
+            if var.startswith('key' + NameFile):
+                filtervar = var.replace('key', '')    
+                filtervar = filtervar.replace(NameFile, '')    
+                Target.write(filtervar + '\n')
+        Target.write('\npublic class ' + NoJavaNameFile + ' implements Listener {')
+        for var in PyCub_C_Write:
+            # print('write (in file ' + NameFile + ')' + var)
+            if var.startswith('key' + NameFile):
+                filtervar = var
+                filtervar = var.replace('key', '')    
+                filtervar = filtervar.replace(NameFile, '')    
+                Target.write(filtervar)
+        Target.close()
 
-#    Target.write('package fr.' + ProjectName + ''.listeners;')
-    PyCub_Import(' ')
-    for var in PyCub_C_Import:
-        Target.write(var + "\n")
-    for var in PyCub_C_Write:
-        Target.write(var)
-
-
+    print('DIR : ' + dir + ProjectName + '/' + 'data.json')
     # ADD LISTENERS, COMMAND IN Main.java
 
-    MainFile.write('package fr.gonpvp;' + '\n')
-    for var in PyCub_Listener_Name:
-        Target.write('fr.gonpvp.listeners.' + var + ';\n')
-    for var in PyCub_Command_Name:
-        Target.write('fr.gonpvp.command.' + var + ';\n')    
+    # MainFile.write('package fr.gonpvp;' + '\n')
+    # for var in PyCub_Listener_Name:
+    #     Target.write('fr.gonpvp.listeners.' + var + ';\n')
+    # for var in PyCub_Command_Name:
+    #     Target.write('fr.gonpvp.command.' + var + ';\n')    
         
     # CLOSE ALL FILE WITH METHOD close()
-    Target.close()
     From.close()
 
     print("Compiled !")
@@ -367,7 +406,7 @@ def PyCub_Compil(dir, File_name, main, author = "PyCubTranspilator"):
 #                                | |            _/ |              
 #                                |_|           |__/               
 
-def PyCub_CreateProject(dir, ProjectName, main, smallpackage = "fr.gonpvp", author = "PyCubTranspilator"):
+def PyCub_CreateProject(dir, ProjectName, country = "fr", author = "PyCubTranspilator"):
     
     print('Project ' + ProjectName + ' is being created ...')
     
@@ -385,9 +424,10 @@ def PyCub_CreateProject(dir, ProjectName, main, smallpackage = "fr.gonpvp", auth
     pl_yml = open(PlYmlFile, 'w+', encoding='utf8')
     
     
-    pl_yml.write('name: ' + ProjectName + '\n')
+    pl_yml.write('name: ' + ProjectName.lower() + '\n')
     pl_yml.write('author: ' + author + '\n')
     
+    main = country + '.' + author + '.' + ProjectName.lower()
     pl_yml.write('main: ' + main + '\n')
     pl_yml.write('version: ' + '0.1' + '\n')
     pl_yml.write('commands:' + '\n')
@@ -396,32 +436,9 @@ def PyCub_CreateProject(dir, ProjectName, main, smallpackage = "fr.gonpvp", auth
     
     # CREATE MAIN DIR
     
-    
     maindir = main.replace('.', '/')
     main_dir = dir + ProjectName + '/src/main/java/' + maindir + '/'
     os.makedirs(os.path.dirname(main_dir), exist_ok=True)
-    
-        
-    #                       _             _       _          _                 
-    #                      | |           | |     | |        (_)                
-    #    ___ _ __ ___  __ _| |_ ___    __| | __ _| |_ __ _   _ ___  ___  _ __  
-    #   / __| '__/ _ \/ _` | __/ _ \  / _` |/ _` | __/ _` | | / __|/ _ \| '_ \ 
-    #  | (__| | |  __/ (_| | ||  __/ | (_| | (_| | || (_| |_| \__ \ (_) | | | |
-    #   \___|_|  \___|\__,_|\__\___|  \__,_|\__,_|\__\__,_(_) |___/\___/|_| |_|
-    #                                                      _/ |                
-    #                                                     |__/                 
-        
-    ContentData = {
-    'main dir': main_dir,
-    'plugins.yml dir': PlYmlFile,
-    'small package': smallpackage,
-    }
-    
-    with open(dir + ProjectName + '/' + 'data.json', 'w') as file_json:
-        json.dump(ContentData, file_json)
-    
-    print('Successfully created project!')
-    
     
 
 def panel():
@@ -443,20 +460,25 @@ def panel():
     while True: 
         command_input = input("Type the command : ")
         if command_input == 'help':
-            print(' - c(reate)p(rojet) <dir> <name> <main> <smallpackage> <author>')
-            print('Allows you to create a script project')
-            print('Exemple: cp C:/PythonProject/Pycub/projects/ test fr.exemple.author fr.exemple')
             print('')
-            print(' - p(roject)r(eload) <dir> <name>')
+            print('--------------------')
+            print('')
+            print(' - c(reate)p(rojet) <dir> <name> <country> <author>')
+            print('Allows you to create a script project')
+            print('Exemple: cp C:/PythonProject/Pycub/projects/ test fr gonpvp')
+            print('')
+            print(' - rl <dir> <name>')
             print('Allows you to create a script project')
             print('Exemple: pr C:/PythonProject/Pycub/projects/ test')
+            print('')
+            print('Support: discord.gg/hm8VXyVx5u')
             print('')
         
         elif command_input.startswith('cp') or command_input.startswith('cr'):
             command_strip = command_input.split(' ')
             PyCub_CreateProject(command_strip[1], command_strip[2], command_strip[3], command_strip[4])
         
-        elif command_input.startswith('pr'):
+        elif command_input.startswith('rl'):
             command_strip = command_input.split(' ')
             PyCub_Compil(command_strip[1], command_strip[2])
         

@@ -34,7 +34,7 @@
 import os
 import json
 
-def PyCub_Compil(dir, ProjectName):
+def PyCub_Compil(dir , ProjectName):
 
     DataFile = dir + ProjectName + '/' + 'data.json'
     DataFile = open(DataFile, 'r', encoding='utf8')
@@ -142,15 +142,11 @@ def PyCub_Compil(dir, ProjectName):
             if "setjoinmessage" in From.read():
                 print(f"You can't use the setjoinmessage() expression because it already exists ")
             else:
-                expr = car
-                expr = expr[14:-1]
-                expr = PyCub_ModifArg(expr, "setjoinmessage")
+                expr = PyCub_ModifArg(car[14:-1], "setjoinmessage")
                 PyCub_Write(tab * 2 + "event.setJoinMessage(" + expr + ");\n")  
         
         elif car.startswith('broadcast'):
-            expr = car
-            expr = expr[10:-1]
-            expr = PyCub_ModifArg(expr, "broadcast")
+            expr = PyCub_ModifArg(car[10:-1], "broadcast")
             PyCub_Write(tab * 2 + "Bukkit.broadcastMessage(" + expr + ");\n")   
 
         else:
@@ -322,8 +318,7 @@ def PyCub_Compil(dir, ProjectName):
         else:        
             PyCub_Write('\n')
             
-            acar = car
-            acar.replace(" ", "")
+            acar = car.replace(" ", "")
             
             if PycubLign != 1:
                 if car.strip() == '':
@@ -332,19 +327,16 @@ def PyCub_Compil(dir, ProjectName):
     if first_event == True:
         PyCub_Write('}\n')
     
-    #                 _ _           _                  
-    #                (_) |         (_)                 
-    #  __      ___ __ _| |_ ___     _  __ ___   ____ _ 
-    #  \ \ /\ / / '__| | __/ _ \   | |/ _` \ \ / / _` |
-    #   \ V  V /| |  | | ||  __/  _| | (_| |\ V / (_| |
-    #    \_/\_/ |_|  |_|\__\___| (_) |\__,_| \_/ \__,_|
-    #                             _/ |                 
-    #                            |__/                      
-        
-    print('dir : ' + dir + ProjectName + '/src/main/resources/' + 'plugin.yml')
+    #                  _           _             _                        _ 
+    #             | |         | |           (_)                      | |
+    #    __ _  ___| |_   _ __ | |_   _  __ _ _ _ __   _   _ _ __ ___ | |
+    #   / _` |/ _ \ __| | '_ \| | | | |/ _` | | '_ \ | | | | '_ ` _ \| |
+    #  | (_| |  __/ |_  | |_) | | |_| | (_| | | | | || |_| | | | | | | |
+    #   \__, |\___|\__| | .__/|_|\__,_|\__, |_|_| |_(_)__, |_| |_| |_|_|
+    #    __/ |          | |             __/ |          __/ |            
+    #   |___/           |_|            |___/          |___/             
+    
     with open(dir + ProjectName + '/src/main/resources/' + 'plugin.yml', 'r') as PluginYml:
-        # author = PluginYml.readline(2).replace('author: ', '').rstrip()
-        # main = PluginYml.readline(3).rstrip()
         
         numberlign = 1
         
@@ -354,17 +346,30 @@ def PyCub_Compil(dir, ProjectName):
                 author = textlign.replace('author: ', '')
                 print('author : ' + author)
             elif numberlign == 3:
-                author = textlign.replace('author: ', '').strip('.')
-                print('author : ' + author)
+                main = textlign.replace('main: ', '').strip('.')
+                print('main : ' + main)
+                maindir = main.replace('.', '/')
+                mainpackage = main.split('.')
+                
             numberlign += 1
             
             textlign = PluginYml.readline().rstrip()
-            
-#        maindir = main.replace('.', '/')
+
+    #                 _ _           _                  
+    #                (_) |         (_)                 
+    #  __      ___ __ _| |_ ___     _  __ ___   ____ _ 
+    #  \ \ /\ / / '__| | __/ _ \   | |/ _` \ \ / / _` |
+    #   \ V  V /| |  | | ||  __/  _| | (_| |\ V / (_| |
+    #    \_/\_/ |_|  |_|\__\___| (_) |\__,_| \_/ \__,_|
+    #                             _/ |                 
+    #                            |__/                      
         
+
     for NameFile in PyCub_JavaFile:
         print('Writing file ' + NameFile + '...')
-        Target = open(PathTargetFile + NameFile, 'w+', encoding='utf8')
+        
+        Target = open(dir + ProjectName + '/src/main/java/' + maindir + '/' + NameFile, 'w+', encoding='utf8')
+        
         NoJavaNameFile = NameFile.replace('.java','')
         Target.write('package fr.gonpvp.' + NoJavaNameFile.lower() + ';\n\n')
         for var in PyCub_C_Import:
@@ -383,7 +388,43 @@ def PyCub_Compil(dir, ProjectName):
                 Target.write(filtervar)
         Target.close()
 
-    print('DIR : ' + dir + ProjectName + '/' + 'data.json')
+    OnEnable = open(dir + ProjectName + '/src/main/java/' + maindir + '/' + 'OnEnable.java', 'w+', encoding='utf8')
+    
+    OnEnable.write('package ' + mainpackage[1] + '.' + mainpackage[2] + '.' + ';')
+    # package country.exemple;
+
+    # Import comming soon
+    # import fr.gonpvp.listeners.LConnections;
+    # import org.bukkit.plugin.java.JavaPlugin;
+    
+    OnEnable.write('public final class ' + ProjectName + ' extends JavaPlugin {\n\n')
+    # public final class ProjectName extends JavaPlugin {
+    OnEnable.write('private static ' + ProjectName + ' INSTANCE;')
+    # private static fiffa INSTANCE;
+
+# COMMING SOON
+#     @Override
+#     public void onEnable() {
+#         INSTANCE = this;
+#         // Plugin startup logic
+#         getServer().getPluginManager().registerEvents(new LConnections(), this);
+
+#     }
+
+#     @Override
+#     public void onDisable() {
+#         // Plugin shutdown logic
+#     }
+
+#     public fiffa getInstance(){
+#         return INSTANCE;
+#     }
+
+# }
+
+
+
+    # print('DIR : ' + dir + ProjectName + '/' + 'data.json')
     # ADD LISTENERS, COMMAND IN Main.java
 
     # MainFile.write('package fr.gonpvp;' + '\n')
@@ -463,20 +504,21 @@ def panel():
             print('')
             print('--------------------')
             print('')
-            print(' - c(reate)p(rojet) <dir> <name> <country> <author>')
+            print(' - c(reate)p(rojet) <dir> <country> <author> <name>')
             print('Allows you to create a script project')
             print('Exemple: cp C:/PythonProject/Pycub/projects/ test fr gonpvp')
             print('')
             print(' - rl <dir> <name>')
             print('Allows you to create a script project')
-            print('Exemple: pr C:/PythonProject/Pycub/projects/ test')
+            print('Exemple: rl C:/PythonProject/Pycub/projects/ test')
             print('')
             print('Support: discord.gg/hm8VXyVx5u')
             print('')
         
         elif command_input.startswith('cp') or command_input.startswith('cr'):
-            command_strip = command_input.split(' ')
-            PyCub_CreateProject(command_strip[1], command_strip[2], command_strip[3], command_strip[4])
+            commands = command_input.split(' ')
+            package = commands[1].split('.')
+            PyCub_CreateProject(package[0], package[4], package[3], package[2])
         
         elif command_input.startswith('rl'):
             command_strip = command_input.split(' ')
@@ -524,3 +566,4 @@ if __name__ == '__main__':
                                                    ~--______-~                ~-___-~      
             """)
     panel()
+    

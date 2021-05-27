@@ -36,9 +36,6 @@ import json
 
 def PyCub_Compil(dir , ProjectName):
 
-    DataFile = dir + ProjectName + '/' + 'data.json'
-    DataFile = open(DataFile, 'r', encoding='utf8')
-
     #                 _ _          __ _ _      
     #                (_) |        / _(_) |     
     #  __      ___ __ _| |_ ___  | |_ _| | ___ 
@@ -60,19 +57,18 @@ def PyCub_Compil(dir , ProjectName):
         PyCub_JavaFile.append(name.rstrip() + '.java')
         print('add file' + str(PyCub_JavaFile) + ActuelFileModif)
     
-    # ADD LISTENERS IN MAIN.JAVA
+    # ADD LISTENERS IN OnEnable.java
     
     def PyCub_AddListener(var):
         ListenerText = var
-        PyCub_Listener_Write.append('getServer().getPluginManager().registerEvents(new ' + var + 'testListener(), this);')   
-        PyCub_Listener_Name.append(var)  
+        PyCub_Listener_Write.append(var)  
     
-    # ADD COMMAND IN MAIN.JAVA
+    # # ADD COMMAND IN OnEnable.java
     
-    def PyCub_AddCommand(var):
-        ListenerText = var
-        PyCub_Command_Write.append('getCommand("' + var + 'test").setExecutor(new testCommand());')   
-        PyCub_Command_Name.append(var)  
+    # def PyCub_AddCommand(var):
+    #     ListenerText = var
+    #     # PyCub_Command_Write.append('getCommand("' + var + 'test").setExecutor(new testCommand());')   
+    #     PyCub_Command_Write.append(var)  
     
     # SEPARATE ESPACE    
         
@@ -246,12 +242,10 @@ def PyCub_Compil(dir , ProjectName):
     PycubLign = 1
     PyCub_C_Write = []
     PyCub_C_Import = []
-    PyCub_Listener_Name = []
-    PyCub_Command_Name = []
     PyCub_Listener_Write = []
     PyCub_Command_Write = []
-    PyCub_JavaFile = ['Main.java']
-    ActuelFileModif = 'Main.java'
+    PyCub_JavaFile = ['OnEnable.java']
+    ActuelFileModif = 'OnEnable.java'
     
 #                 _ _              _               _              
 #                (_) |            | |             | |             
@@ -390,14 +384,14 @@ def PyCub_Compil(dir , ProjectName):
 
     OnEnable = open(dir + ProjectName + '/src/main/java/' + maindir + '/' + 'OnEnable.java', 'w+', encoding='utf8')
     
-    OnEnable.write('package ' + mainpackage[1] + '.' + mainpackage[2] + '.' + ';')
-    for var in PyCub_Listener_Name:
+    OnEnable.write('package ' + mainpackage[1] + '.' + mainpackage[2] + ';\n')
+    for var in PyCub_Listener_Write:
         # import fr.gonpvp.listeners.name of listeners;
         Target.write(+ mainpackage[1] + '.' + mainpackage[2] + '.listeners.' + var + ';\n')
     
-    for var in PyCub_Command_Name:
-        # import fr.gonpvp.listeners.name of command;
-        Target.write(+ mainpackage[1] + '.' + mainpackage[2] + '.command.' + var + ';\n')
+    # for var in PyCub_Command_Write:
+    #     # import fr.gonpvp.listeners.name of command;
+    #     Target.write(+ mainpackage[1] + '.' + mainpackage[2] + '.command.' + var + ';\n')
     
     OnEnable.write('org.bukkit.plugin.java.JavaPlugin;\n\n')
     OnEnable.write('public final class ' + ProjectName + ' extends JavaPlugin {\n\n')
@@ -406,22 +400,22 @@ def PyCub_Compil(dir , ProjectName):
     OnEnable.write(tab + 'private static ' + ProjectName + ' INSTANCE;\n\n')
     #   private static ProjectName INSTANCE;
     
-    OnEnable.write(tab + '@Override')
+    OnEnable.write(tab + '@Override\n')
     OnEnable.write(tab + 'public void onEnable() {\n')
-    OnEnable.write(tab * 2 + 'INSTANCE = this;\n' + '// Plugin startup logic')
+    OnEnable.write(tab * 2 + 'INSTANCE = this;\n' + tab * 2 +'// Plugin startup logic\n')
     for var in PyCub_Listener_Write:
-        OnEnable.write(tab * 2 + var)
-    for var in PyCub_Command_Write:
-        OnEnable.write(tab * 2 + var)
+        OnEnable.write(tab * 2 + 'getServer().getPluginManager().registerEvents(new ' + var + ProjectName + 'Listener(), this);\n')
+    # for var in PyCub_Command_Write:
+    #     OnEnable.write(tab * 2 + var)
     OnEnable.write(tab + '}\n\n')
     
-    OnEnable.write(tab + '@Override')
+    OnEnable.write(tab + '@Override\n')
     OnEnable.write(tab + 'public void onDisable() {\n')
-    OnEnable.write(tab * 2 + '// Plugin shutdown logic')
+    OnEnable.write(tab * 2 + '// Plugin shutdown logic\n')
     OnEnable.write(tab + '}\n\n')
     
     OnEnable.write(tab + 'public ' + ProjectName + ' getInstance(){\n')
-    OnEnable.write(tab * 2 + 'return INSTANCE;')
+    OnEnable.write(tab * 2 + 'return INSTANCE;\n')
     OnEnable.write(tab + '}\n')
     OnEnable.write('}')
 

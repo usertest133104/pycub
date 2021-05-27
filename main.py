@@ -391,47 +391,41 @@ def PyCub_Compil(dir , ProjectName):
     OnEnable = open(dir + ProjectName + '/src/main/java/' + maindir + '/' + 'OnEnable.java', 'w+', encoding='utf8')
     
     OnEnable.write('package ' + mainpackage[1] + '.' + mainpackage[2] + '.' + ';')
-    # package country.exemple;
-
-    # Import comming soon
-    # import fr.gonpvp.listeners.LConnections;
-    # import org.bukkit.plugin.java.JavaPlugin;
+    for var in PyCub_Listener_Name:
+        # import fr.gonpvp.listeners.name of listeners;
+        Target.write(+ mainpackage[1] + '.' + mainpackage[2] + '.listeners.' + var + ';\n')
     
+    for var in PyCub_Command_Name:
+        # import fr.gonpvp.listeners.name of command;
+        Target.write(+ mainpackage[1] + '.' + mainpackage[2] + '.command.' + var + ';\n')
+    
+    OnEnable.write('org.bukkit.plugin.java.JavaPlugin;\n\n')
     OnEnable.write('public final class ' + ProjectName + ' extends JavaPlugin {\n\n')
     # public final class ProjectName extends JavaPlugin {
-    OnEnable.write('private static ' + ProjectName + ' INSTANCE;')
-    # private static fiffa INSTANCE;
+    
+    OnEnable.write(tab + 'private static ' + ProjectName + ' INSTANCE;\n\n')
+    #   private static ProjectName INSTANCE;
+    
+    OnEnable.write(tab + '@Override')
+    OnEnable.write(tab + 'public void onEnable() {\n')
+    OnEnable.write(tab * 2 + 'INSTANCE = this;\n' + '// Plugin startup logic')
+    for var in PyCub_Listener_Write:
+        OnEnable.write(tab * 2 + var)
+    for var in PyCub_Command_Write:
+        OnEnable.write(tab * 2 + var)
+    OnEnable.write(tab + '}\n\n')
+    
+    OnEnable.write(tab + '@Override')
+    OnEnable.write(tab + 'public void onDisable() {\n')
+    OnEnable.write(tab * 2 + '// Plugin shutdown logic')
+    OnEnable.write(tab + '}\n\n')
+    
+    OnEnable.write(tab + 'public ' + ProjectName + ' getInstance(){\n')
+    OnEnable.write(tab * 2 + 'return INSTANCE;')
+    OnEnable.write(tab + '}\n')
+    OnEnable.write('}')
 
-# COMMING SOON
-#     @Override
-#     public void onEnable() {
-#         INSTANCE = this;
-#         // Plugin startup logic
-#         getServer().getPluginManager().registerEvents(new LConnections(), this);
-
-#     }
-
-#     @Override
-#     public void onDisable() {
-#         // Plugin shutdown logic
-#     }
-
-#     public fiffa getInstance(){
-#         return INSTANCE;
-#     }
-
-# }
-
-
-
-    # print('DIR : ' + dir + ProjectName + '/' + 'data.json')
-    # ADD LISTENERS, COMMAND IN Main.java
-
-    # MainFile.write('package fr.gonpvp;' + '\n')
-    # for var in PyCub_Listener_Name:
-    #     Target.write('fr.gonpvp.listeners.' + var + ';\n')
-    # for var in PyCub_Command_Name:
-    #     Target.write('fr.gonpvp.command.' + var + ';\n')    
+    OnEnable.close()
         
     # CLOSE ALL FILE WITH METHOD close()
     From.close()
@@ -566,4 +560,3 @@ if __name__ == '__main__':
                                                    ~--______-~                ~-___-~      
             """)
     panel()
-    

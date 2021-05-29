@@ -1,14 +1,13 @@
-start file: startfile
+metodfile(event)
 
 on player join:
     broadcast(player name + "testsetseest")
+    broadcast(player name + "testsetseest")
     stop
 
-change file: omgg
+changefile(event,test)
 
 on player join:
     broadcast(player name)
     stop
-
-change file: testsetseest
 

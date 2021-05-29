@@ -1,14 +1,15 @@
-package fr.gonpvp.omgg;
+package fr.gonpvp.test;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class omgg implements Listener {
+public class test implements Listener {
 
     @EventHandler 
-    public void OnPlayerJoin6(PlayerJoinEvent event) {
+    public void OnPlayerJoin2(PlayerJoinEvent event) {
         Bukkit.broadcastMessage(event.getPlayer().getName());
     }
+
 
 }

@@ -34,10 +34,7 @@
 import os
 import json
 
-def PyCub_Compil(dir, ProjectName):
-
-    DataFile = dir + ProjectName + '/' + 'data.json'
-    DataFile = open(DataFile, 'r', encoding='utf8')
+def PyCub_Compil(dir , ProjectName):
 
     #                 _ _          __ _ _      
     #                (_) |        / _(_) |     
@@ -60,19 +57,18 @@ def PyCub_Compil(dir, ProjectName):
         PyCub_JavaFile.append(name.rstrip() + '.java')
         print('add file' + str(PyCub_JavaFile) + ActuelFileModif)
     
-    # ADD LISTENERS IN MAIN.JAVA
+    # ADD LISTENERS IN OnEnable.java
     
     def PyCub_AddListener(var):
         ListenerText = var
-        PyCub_Listener_Write.append('getServer().getPluginManager().registerEvents(new ' + var + 'testListener(), this);')   
-        PyCub_Listener_Name.append(var)  
+        PyCub_Listener_Write.append(var)  
     
-    # ADD COMMAND IN MAIN.JAVA
+    # # ADD COMMAND IN OnEnable.java
     
     def PyCub_AddCommand(var):
         ListenerText = var
-        PyCub_Command_Write.append('getCommand("' + var + 'test").setExecutor(new testCommand());')   
-        PyCub_Command_Name.append(var)  
+        # PyCub_Command_Write.append('getCommand("' + var + 'test").setExecutor(new testCommand());')   
+        PyCub_Command_Write.append(var)  
     
     # SEPARATE ESPACE    
         
@@ -142,15 +138,11 @@ def PyCub_Compil(dir, ProjectName):
             if "setjoinmessage" in From.read():
                 print(f"You can't use the setjoinmessage() expression because it already exists ")
             else:
-                expr = car
-                expr = expr[14:-1]
-                expr = PyCub_ModifArg(expr, "setjoinmessage")
+                expr = PyCub_ModifArg(car[14:-1], "setjoinmessage")
                 PyCub_Write(tab * 2 + "event.setJoinMessage(" + expr + ");\n")  
         
         elif car.startswith('broadcast'):
-            expr = car
-            expr = expr[10:-1]
-            expr = PyCub_ModifArg(expr, "broadcast")
+            expr = PyCub_ModifArg(car[10:-1], "broadcast")
             PyCub_Write(tab * 2 + "Bukkit.broadcastMessage(" + expr + ");\n")   
 
         else:
@@ -250,8 +242,6 @@ def PyCub_Compil(dir, ProjectName):
     PycubLign = 1
     PyCub_C_Write = []
     PyCub_C_Import = []
-    PyCub_Listener_Name = []
-    PyCub_Command_Name = []
     PyCub_Listener_Write = []
     PyCub_Command_Write = []
     PyCub_JavaFile = ['Main.java']
@@ -284,11 +274,36 @@ def PyCub_Compil(dir, ProjectName):
         # elif car.startswith('delete file:'):
         #     PyCub_AddJavaFile(car[12:])
         #     print('test changefile' + car[12:])
-        elif car.startswith('start file:'):
-            PyCub_AddJavaFile(car[12:])
-        elif car.startswith('change file:') or car.startswith('moove file:'):
-            PyCub_Write('}\n')
-            PyCub_AddJavaFile(car[13:])
+        
+        elif car.startswith('metodfile('):
+            PyCub_AddJavaFile('Main')
+            
+            if car[10:-1].lower == 'command' or 'commands':
+                PyCub_AddListener('Main')
+                print('COMMAND ADD')
+            elif car[10:-1].lower == 'listeners' or 'event':
+                PyCub_AddCommand('Main')
+                print('LISTENERS ADD')
+            else:
+                print('Method change file not exist method file (command or event)')
+       
+        elif car.startswith('changefile('):
+            changefilearg = car[11:-2].split(',')
+            clTrue = 1
+            for var in changefilearg:
+                if clTrue == 0:
+                    cl = var
+                clTrue = 0
+            PyCub_AddJavaFile(changefilearg[1])
+            if cl == 'command' or 'commands':
+                PyCub_AddListener(cl)
+                print('COMMAND ADD')
+            elif cl == 'listeners' or 'event':
+                PyCub_AddCommand(cl)
+                print('LISTENERS ADD')
+            else:
+                print('Method change file not specify method file (command or event)')
+
 #        elif car.startswith('import'):
 #            if car.startswith('import bukkit'):
 #                PyCub_Write('import org.bukkit;\n')
@@ -322,16 +337,40 @@ def PyCub_Compil(dir, ProjectName):
         else:        
             PyCub_Write('\n')
             
-            acar = car
-            acar.replace(" ", "")
+            acar = car.replace(" ", "")
             
             if PycubLign != 1:
                 if car.strip() == '':
                     print("The types is not exist PycubLign" + str(PycubLign))
-
-    if first_event == True:
-        PyCub_Write('}\n')
     
+    #                  _           _             _                        _ 
+    #             | |         | |           (_)                      | |
+    #    __ _  ___| |_   _ __ | |_   _  __ _ _ _ __   _   _ _ __ ___ | |
+    #   / _` |/ _ \ __| | '_ \| | | | |/ _` | | '_ \ | | | | '_ ` _ \| |
+    #  | (_| |  __/ |_  | |_) | | |_| | (_| | | | | || |_| | | | | | | |
+    #   \__, |\___|\__| | .__/|_|\__,_|\__, |_|_| |_(_)__, |_| |_| |_|_|
+    #    __/ |          | |             __/ |          __/ |            
+    #   |___/           |_|            |___/          |___/             
+    
+    with open(dir + ProjectName + '/src/main/resources/' + 'plugin.yml', 'r') as PluginYml:
+        
+        numberlign = 1
+        
+        textlign = PluginYml.readline().rstrip()
+        while textlign:
+            if numberlign == 2:
+                author = textlign.replace('author: ', '')
+                # print('author : ' + author)
+            elif numberlign == 3:
+                main = textlign.replace('main: ', '').strip('.')
+                # print('main : ' + main)
+                maindir = main.replace('.', '/')
+                mainpackage = main.split('.')
+                
+            numberlign += 1
+            
+            textlign = PluginYml.readline().rstrip()
+
     #                 _ _           _                  
     #                (_) |         (_)                 
     #  __      ___ __ _| |_ ___     _  __ ___   ____ _ 
@@ -341,56 +380,85 @@ def PyCub_Compil(dir, ProjectName):
     #                             _/ |                 
     #                            |__/                      
         
-    print('dir : ' + dir + ProjectName + '/src/main/resources/' + 'plugin.yml')
-    with open(dir + ProjectName + '/src/main/resources/' + 'plugin.yml', 'r') as PluginYml:
-        # author = PluginYml.readline(2).replace('author: ', '').rstrip()
-        # main = PluginYml.readline(3).rstrip()
-        
-        numberlign = 1
-        
-        textlign = PluginYml.readline().rstrip()
-        while textlign:
-            if numberlign == 2:
-                author = textlign.replace('author: ', '')
-                print('author : ' + author)
-            elif numberlign == 3:
-                author = textlign.replace('author: ', '').strip('.')
-                print('author : ' + author)
-            numberlign += 1
-            
-            textlign = PluginYml.readline().rstrip()
-            
-#        maindir = main.replace('.', '/')
-        
+
     for NameFile in PyCub_JavaFile:
         print('Writing file ' + NameFile + '...')
-        Target = open(PathTargetFile + NameFile, 'w+', encoding='utf8')
+        
+        Target = open(dir + ProjectName + '/src/main/java/' + maindir + '/' + NameFile, 'w+', encoding='utf8')
+        
         NoJavaNameFile = NameFile.replace('.java','')
+        
+        # WRITING PACKAGE
+        
         Target.write('package fr.gonpvp.' + NoJavaNameFile.lower() + ';\n\n')
+        
+        # WRITING IMPORT
+        
         for var in PyCub_C_Import:
-            # print('import (in file ' + NameFile + ')' + var)
             if var.startswith('key' + NameFile):
                 filtervar = var.replace('key', '')    
                 filtervar = filtervar.replace(NameFile, '')    
                 Target.write(filtervar + '\n')
+        
         Target.write('\npublic class ' + NoJavaNameFile + ' implements Listener {')
+        
+        # WRITING A JAVA CODE
+        
         for var in PyCub_C_Write:
-            # print('write (in file ' + NameFile + ')' + var)
             if var.startswith('key' + NameFile):
                 filtervar = var
                 filtervar = var.replace('key', '')    
                 filtervar = filtervar.replace(NameFile, '')    
                 Target.write(filtervar)
+        
+        Target.write('\n}')
         Target.close()
 
-    print('DIR : ' + dir + ProjectName + '/' + 'data.json')
-    # ADD LISTENERS, COMMAND IN Main.java
+    OnEnable = open(dir + ProjectName + '/src/main/java/' + maindir + '/' + 'OnEnable.java', 'w+', encoding='utf8')
+    
+    # WRITING PACKAGE
+    OnEnable.write('package ' + mainpackage[1] + '.' + mainpackage[2] + ';\n\n')
+    
+    # WRITING LISTENERS
+    
+    print(*PyCub_Listener_Write)
+    for var in PyCub_Listener_Write:
+        # import fr.gonpvp.listeners.name of listeners;
+        print('loop')
+        OnEnable.write(mainpackage[1] + '.' + mainpackage[2] + '.listeners.' + var + ';\n')
+    
+    # for var in PyCub_Command_Write:
+    #     # import fr.gonpvp.listeners.name of command;
+    #     Target.write(+ mainpackage[1] + '.' + mainpackage[2] + '.command.' + var + ';\n')
+    
+    OnEnable.write('org.bukkit.plugin.java.JavaPlugin;\n\n')
+    OnEnable.write('public final class ' + ProjectName + ' extends JavaPlugin {\n\n')
+    # public final class ProjectName extends JavaPlugin {
+    
+    OnEnable.write(tab + 'private static ' + ProjectName + ' INSTANCE;\n\n')
+    #   private static ProjectName INSTANCE;
+    
+    OnEnable.write(tab + '@Override\n')
+    OnEnable.write(tab + 'public void onEnable() {\n')
+    OnEnable.write(tab * 2 + 'INSTANCE = this;\n' + tab * 2 +'// Plugin startup logic\n')
+    for var in PyCub_Listener_Write:
+        print('loop')
+        OnEnable.write(tab * 2 + 'getServer().getPluginManager().registerEvents(new ' + var + ProjectName + 'Listener(), this);\n')
+    # for var in PyCub_Command_Write:
+    #     OnEnable.write(tab * 2 + var)
+    OnEnable.write(tab + '}\n\n')
+    
+    OnEnable.write(tab + '@Override\n')
+    OnEnable.write(tab + 'public void onDisable() {\n')
+    OnEnable.write(tab * 2 + '// Plugin shutdown logic\n')
+    OnEnable.write(tab + '}\n\n')
+    
+    OnEnable.write(tab + 'public ' + ProjectName + ' getInstance(){\n')
+    OnEnable.write(tab * 2 + 'return INSTANCE;\n')
+    OnEnable.write(tab + '}\n')
+    OnEnable.write('}')
 
-    # MainFile.write('package fr.gonpvp;' + '\n')
-    # for var in PyCub_Listener_Name:
-    #     Target.write('fr.gonpvp.listeners.' + var + ';\n')
-    # for var in PyCub_Command_Name:
-    #     Target.write('fr.gonpvp.command.' + var + ';\n')    
+    OnEnable.close()
         
     # CLOSE ALL FILE WITH METHOD close()
     From.close()
@@ -463,20 +531,21 @@ def panel():
             print('')
             print('--------------------')
             print('')
-            print(' - c(reate)p(rojet) <dir> <name> <country> <author>')
+            print(' - c(reate)p(rojet) <dir> <country> <author> <name>')
             print('Allows you to create a script project')
             print('Exemple: cp C:/PythonProject/Pycub/projects/ test fr gonpvp')
             print('')
             print(' - rl <dir> <name>')
             print('Allows you to create a script project')
-            print('Exemple: pr C:/PythonProject/Pycub/projects/ test')
+            print('Exemple: rl C:/PythonProject/Pycub/projects/ test')
             print('')
             print('Support: discord.gg/hm8VXyVx5u')
             print('')
         
         elif command_input.startswith('cp') or command_input.startswith('cr'):
-            command_strip = command_input.split(' ')
-            PyCub_CreateProject(command_strip[1], command_strip[2], command_strip[3], command_strip[4])
+            commands = command_input.split(' ')
+            package = commands[1].split('.')
+            PyCub_CreateProject(package[0], package[4], package[3], package[2])
         
         elif command_input.startswith('rl'):
             command_strip = command_input.split(' ')

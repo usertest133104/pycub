@@ -1,7 +1,7 @@
 <!-- [![Contributors][contributors-shield]][0] -->
-[![Forks][forks-shield]][https://github.com/gonpvp/pycub/network/members]
-[![Stargazers][stars-shield]][https://github.com/gonpvp/pycub/stargazers]
-[![Issues][issues-shield]][https://github.com/gonpvp/pycub/issues]
+[![Forks][forks-shield]][contributors-url]
+[![Stargazers][stars-shield]][forks-url]
+[![Issues][issues-shield]][issues-url]
 
 <!-- PROJECT LOGO -->
 <br />

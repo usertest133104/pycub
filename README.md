@@ -1,4 +1,4 @@
-[![Contributors][contributors-shield]][0]
+<!-- [![Contributors][contributors-shield]][0] -->
 [![Forks][forks-shield]][https://github.com/gonpvp/pycub/network/members]
 [![Stargazers][stars-shield]][https://github.com/gonpvp/pycub/stargazers]
 [![Issues][issues-shield]][https://github.com/gonpvp/pycub/issues]

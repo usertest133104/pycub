@@ -21,7 +21,7 @@ Official Discord: https://discord.gg/hm8VXyVx5u
   <h3 align="center">PyCub</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    The new generation for developpement langage for Minecraft !
     <br />
     <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs » (COMMING SOON)</strong></a>
     <br />
@@ -67,13 +67,14 @@ Official Discord: https://discord.gg/hm8VXyVx5u
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Product Name Screen Shot][Logo]](https://example.com)
 
 A transpiler of simplified source code (the pycub language dedicated to coding on Minecraft) into Java code, the project was inspired by the organization of SkriptLang
 
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
-* [Laravel](https://laravel.com)
+*   Fast
+*   Optimized
+*   No dependent for Minecraft
+*   Similary to SkriptLang
 
 
 
@@ -111,7 +112,7 @@ This is an example of how to list things you need to use the software and how to
    python main/main.py
    ```
 
-<!-- _For more examples, please refer to the [Documentation](https://example.com)_ -->
+_For more examples, please refer to the [Documentation]( COMMING SOON )_
 
 
 

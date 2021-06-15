@@ -1,0 +1,4 @@
+# tests
+
+on player join:
+    broadcast("test")

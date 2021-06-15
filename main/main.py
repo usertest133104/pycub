@@ -33,8 +33,18 @@
 
 import os
 import json
-import effect
 import event
+
+
+class Compiler(object):
+    def write(var):
+        PyCub_C_Write.append('key' + PyCub_JavaFile[-1] + var)
+
+    def Import(var):
+        if 'key' + PyCub_JavaFile[-1] + var in PyCub_C_Import:
+            pass
+        else:
+            PyCub_C_Import.append('key' + PyCub_JavaFile[-1] + var)
 
 def PyCub_Compil(dir , ProjectName):
 
@@ -48,15 +58,6 @@ def PyCub_Compil(dir , ProjectName):
              
     def pycubprint(var):
         print(var)        
-                                
-    def Write(var):
-        PyCub_C_Write.append('key' + PyCub_JavaFile[-1] + var)
-    
-    def Import(var):
-        if 'key' + PyCub_JavaFile[-1] + var in PyCub_C_Import:
-            pass
-        else:
-            PyCub_C_Import.append('key' + PyCub_JavaFile[-1] + var)
     
     def AddJavaFile(name):
         PyCub_JavaFile.append(name.rstrip() + '.java')
@@ -139,12 +140,6 @@ def PyCub_Compil(dir , ProjectName):
     #  |___/\__, |_| |_|\__\__,_/_/\_\  |___/\___|_|\___|\___|\__\___/|_|   
     #        __/ |                                                          
     #       |___/                                                           
-      
-    def PyCub_ChoiceArg(car, event):
-        if " = " in car:
-            PyCub_AddCalcul(car, event) 
-        else:
-            effect.add(car, event)
 
     print("Loading ...")
 
@@ -155,17 +150,26 @@ def PyCub_Compil(dir , ProjectName):
     TargetCacheFile = 'C:/PythonProject/Pycub/scripts/.cache/test.pycub'
     
     From = open(FromFile, 'r', encoding='utf8')
-
+    global PyCub_From
+    PyCub_From = From
     tab = "    "
     first_event = False
     global PycubLign
     PycubLign = 1
+    global PyCub_C_Write
     PyCub_C_Write = []
+    global PyCub_C_Import
     PyCub_C_Import = []
+    global PyCub_Listener_Write
     PyCub_Listener_Write = []
+    global PyCub_Command_Write
     PyCub_Command_Write = []
+    global PyCub_JavaFile
     PyCub_JavaFile = ['Main.java']
+    global ActuelFileModif
     ActuelFileModif = 'Main.java'
+    global ActualProjectName
+    ActualProjectName = ProjectName
     
 #                 _ _              _               _              
 #                (_) |            | |             | |             
@@ -190,7 +194,7 @@ def PyCub_Compil(dir , ProjectName):
         PycubLign =+ 1
         
         if car.startswith('#'):
-            Write(car)
+            Compiler.write('\n' + car)
         # elif car.startswith('delete file:'):
         #     AddJavaFile(car[12:])
         #     print('test changefile' + car[12:])
@@ -252,10 +256,10 @@ def PyCub_Compil(dir , ProjectName):
             # CALL EVENT
 
             eventnumber =+ 1
-            event.add(callevent)               
+            EventManager.callevent(callevent)               
                         
         else:        
-            Write('\n')
+            Compiler.write('\n')
             
             acar = car.replace(" ", "")
             
@@ -394,7 +398,7 @@ def PyCub_Compil(dir , ProjectName):
 #                                | |            _/ |              
 #                                |_|           |__/               
 
-def PyCub_CreateProject(dir, ProjectName, country = "fr", author = "PyCubTranspilator"):
+def PyCub_CreateProject(dir, country = "fr", author = "PyCubTranspilator", ProjectName = 'None'):
     
     print('Project ' + ProjectName + ' is being created ...')
     
@@ -452,7 +456,7 @@ def panel():
             print('')
             print(' - c(reate)p(rojet) <dir> <country> <author> <name>')
             print('Allows you to create a script project')
-            print('Exemple: cp C:/PythonProject/Pycub/projects/ test fr gonpvp')
+            print('Exemple: cp C:/PythonProject/Pycub/projects/ fr gonpvp test')
             print('')
             print(' - rl <dir> <name>')
             print('Allows you to create a script project')
@@ -466,8 +470,9 @@ def panel():
         
         elif command_input.startswith('cp') or command_input.startswith('cr'):
             commands = command_input.split(' ')
-            package = commands[1].split('.')
-            PyCub_CreateProject(package[0], package[4], package[3], package[2])
+            for var in commands:
+                print(var)
+            PyCub_CreateProject(commands[1], commands[2], commands[3], commands[4])
         
         elif command_input.startswith('rl'):
             command_strip = command_input.split(' ')
@@ -476,6 +481,9 @@ def panel():
         elif command_input == 'close':
             print('Good bye :)')
             break
+        elif command_input == 'pause':
+            clear = lambda: os.system('pause')
+            clear()
         elif command_input == 'clear':
             clear = lambda: os.system('cls')
             clear()

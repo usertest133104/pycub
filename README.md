@@ -1,15 +1,7 @@
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
-# pycub
-A transpiler of simplified source code (the pycub language dedicated to coding on Minecraft) into Java code, the project was inspired by the organization of SkriptLang
-Official Discord: https://discord.gg/hm8VXyVx5u
-
+[![Contributors][contributors-shield]][0]
+[![Forks][forks-shield]][https://github.com/gonpvp/pycub/network/members]
+[![Stargazers][stars-shield]][https://github.com/gonpvp/pycub/stargazers]
+[![Issues][issues-shield]][https://github.com/gonpvp/pycub/issues]
 
 <!-- PROJECT LOGO -->
 <br />
@@ -66,8 +58,6 @@ Official Discord: https://discord.gg/hm8VXyVx5u
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-[![Product Name Screen Shot][Logo]](https://example.com)
 
 A transpiler of simplified source code (the pycub language dedicated to coding on Minecraft) into Java code, the project was inspired by the organization of SkriptLang
 

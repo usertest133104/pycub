@@ -73,14 +73,6 @@ A transpiler of simplified source code (the pycub language dedicated to coding o
 
 No
 
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
 ### Installation
 
 1. Get a free API Key at [https://example.com](https://example.com)
@@ -141,34 +133,14 @@ Your Discord Project - https://discord.gg/AqBsWNKqM3
 
 Project Link: [https://github.com/gonpvp/pycub](https://github.com/gonpvp/pycub)
 
-
-
-<!-- ACKNOWLEDGEMENTS -->
-## Acknowledgements
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Img Shields](https://shields.io)
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Pages](https://pages.github.com)
-* [Animate.css](https://daneden.github.io/animate.css)
-* [Loaders.css](https://connoratherton.com/loaders)
-* [Slick Carousel](https://kenwheeler.github.io/slick)
-* [Smooth Scroll](https://github.com/cferdinandi/smooth-scroll)
-* [Sticky Kit](http://leafo.net/sticky-kit)
-* [JVectorMap](http://jvectormap.com)
-* [Font Awesome](https://fontawesome.com)
-
-
-
-
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/gonpvp/pycub.svg?style=for-the-badge
 [contributors-url]: https://github.com/gonpvp/pycub/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/gonpvp/pycub.svg?style=for-the-badge
 [forks-url]: https://github.com/gonpvp/pycub/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/gonpvp/pycub.svg?style=for-the-badge
 [stars-url]: https://github.com/gonpvp/pycub/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/gonpvp/pycub.svg?style=for-the-badge
 [issues-url]: https://github.com/gonpvp/pycub/issues
 [product-screenshot]: https://media.discordapp.net/attachments/840209747995131936/842084979017252884/Untitledtest.png?width=513&height=487

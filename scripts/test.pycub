@@ -1,0 +1,6 @@
+on player join:
+    broadcast("qzdqzdqzd")
+
+
+event player join:
+    broadcast("sdsefesf ")

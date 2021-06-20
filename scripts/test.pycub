@@ -1,5 +1,19 @@
+metodfile(event)
+
 on player join:
+    broadcast(player name + "testsetseest")
+    broadcast(player name + "testsetseest")
+    stop
+
+changefile(event,test)
+
+on player join:
+<<<<<<< Updated upstream
     broadcast("qzdqzdqzd")
+=======
+    broadcast(player name)
+    stop
+>>>>>>> Stashed changes
 
 
 event player join:

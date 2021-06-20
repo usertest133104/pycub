@@ -1,5 +1,10 @@
 name: test
+<<<<<<< Updated upstream
 author: gonpvp
 main: fr.gonpvp.test
+=======
+author: PyCubTranspilator
+main: fr.exemple.author
+>>>>>>> Stashed changes
 version: 0.1
 commands:
